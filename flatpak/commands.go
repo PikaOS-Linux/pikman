@@ -1,6 +1,6 @@
 package flatpak
 
-var PackageManager = "flatpak "
+var PackageManager = "flatpak"
 
 var Commands = map[string]string{
 	"install": "install",

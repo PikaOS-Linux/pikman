@@ -1,6 +1,6 @@
 package ubuntu
 
-var PackageManager = "sudo -S apt "
+var PackageManager = "sudo -S apt"
 
 var Commands = map[string]string{
 	"autoremove": "autoremove",

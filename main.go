@@ -247,35 +247,35 @@ func getCommand(command string, osType OSType, containerName string, packageName
 	case Arch:
 		cmd, ok := arch.Commands[command]
 		if ok {
-			return arch.PackageManager + cmd + containerName + strings.Join(packageName, " "), nil
+			return fmt.Sprintf("%s %s %s %s", arch.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Arch", command)
 		}
 	case Fedora:
 		cmd, ok := fedora.Commands[command]
 		if ok {
-			return fedora.PackageManager + cmd + containerName + strings.Join(packageName, " "), nil
+			return fmt.Sprintf("%s %s %s %s", fedora.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Fedora", command)
 		}
 	case Flatpak:
 		cmd, ok := flatpak.Commands[command]
 		if ok {
-			return flatpak.PackageManager + cmd + strings.Join(packageName, " "), nil
+			return fmt.Sprintf("%s %s %s", flatpak.PackageManager, cmd, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Flatpak", command)
 		}
 	case Alpine:
 		cmd, ok := alpine.Commands[command]
 		if ok {
-			return alpine.PackageManager + cmd + containerName + strings.Join(packageName, " "), nil
+			return fmt.Sprintf("%s %s %s %s", alpine.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Alpine", command)
 		}
 	case Ubuntu:
 		cmd, ok := ubuntu.Commands[command]
 		if ok {
-			return ubuntu.PackageManager + cmd + strings.Join(packageName, " "), nil
+			return fmt.Sprintf("%s %s %s", ubuntu.PackageManager, cmd, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Ubuntu", command)
 		}

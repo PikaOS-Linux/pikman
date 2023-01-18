@@ -1,6 +1,6 @@
 package arch
 
-var PackageManager = "apx "
+var PackageManager = "apx"
 
 var Commands = map[string]string{
 	"autoremove": "--aur autoremove",
