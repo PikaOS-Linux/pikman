@@ -5,6 +5,7 @@ Maintainer: ferreo <harderthanfire@gmail.com>
 Rules-Requires-Root: binary-targets
 Build-Depends:
  debhelper-compat (= 13)
+ golang
 Standards-Version: 4.6.1
 Homepage: https://pikaos.ferreo.dev
 
