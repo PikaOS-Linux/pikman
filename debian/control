@@ -1,16 +1,13 @@
 Source: pikman
-Maintainer: ferreo <harderthanfire@gmail.com>
-Uploaders: ferreo <harderthanfire@gmail.com>
-Section: golang
-Testsuite: autopkgtest-pkg-go
+Section: unknown
 Priority: optional
-Build-Depends: debhelper-compat (= 13),
-               dh-golang,
-               golang-any,
-               golang-github-urfave-cli-dev
-Standards-Version: 4.6.0
-Homepage: https://github.com/PikaOS-Linux/pikman
-Rules-Requires-Root: no
+Maintainer: ferreo <harderthanfire@gmail.com>
+Rules-Requires-Root: binary-targets
+Build-Depends:
+ debhelper-compat (= 13),
+  dh-golang (>= 1.1),
+Standards-Version: 4.6.1
+Homepage: https://pikaos.ferreo.dev
 XS-Go-Import-Path: github.com/PikaOS-Linux/pikman
 
 Package: pikman
@@ -18,8 +15,4 @@ Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends}
 Built-Using: ${misc:Built-Using}
-Description: PikaOS package manager (program)
- pikman
- .
- PikaOS package manager
-
+Description: One package manager to rule them all
