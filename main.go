@@ -5,21 +5,12 @@ import (
 	"log"
 	"os"
 	"pikman/loader"
-)
-
-type OSType = int
-
-const (
-	Ubuntu OSType = iota
-	Arch
-	Fedora
-	Alpine
-	Flatpak
+	"pikman/types"
 )
 
 func main() {
 
-	osType := Ubuntu
+	osType := types.Ubuntu
 	containerName := ""
 
 	cli.VersionFlag = &cli.BoolFlag{
@@ -40,7 +31,7 @@ func main() {
 				Usage:   "Install Arch packages (including from the AUR)",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = Arch
+						osType = types.Arch
 					}
 					return nil
 				},
@@ -51,7 +42,7 @@ func main() {
 				Usage:   "Install Fedora packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = Fedora
+						osType = types.Fedora
 					}
 					return nil
 				},
@@ -62,7 +53,7 @@ func main() {
 				Usage:   "Install Alpine packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = Alpine
+						osType = types.Alpine
 					}
 					return nil
 				},
@@ -73,7 +64,7 @@ func main() {
 				Usage:   "Install Flatpak packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = Flatpak
+						osType = types.Flatpak
 					}
 					return nil
 				},

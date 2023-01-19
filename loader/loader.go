@@ -8,23 +8,14 @@ import (
 	"pikman/arch"
 	"pikman/fedora"
 	"pikman/flatpak"
+	"pikman/types"
 	"pikman/ubuntu"
 	"strings"
 )
 
-type OSType = int
-
-const (
-	Ubuntu OSType = iota
-	Arch
-	Fedora
-	Alpine
-	Flatpak
-)
-
-func ProcessCommand(command string, osType OSType, containerName string, packageName []string) error {
+func ProcessCommand(command string, osType types.OSType, containerName string, packageName []string) error {
 	var err error
-	if osType != Ubuntu && osType != Flatpak && containerName != "" {
+	if osType != types.Ubuntu && osType != types.Flatpak && containerName != "" {
 		containerName = "--name " + containerName
 	} else {
 		containerName = ""
@@ -44,37 +35,37 @@ func ProcessCommand(command string, osType OSType, containerName string, package
 	return nil
 }
 
-func getCommand(command string, osType OSType, containerName string, packageName []string) (string, error) {
+func getCommand(command string, osType types.OSType, containerName string, packageName []string) (string, error) {
 	switch osType {
-	case Arch:
+	case types.Arch:
 		cmd, ok := arch.Commands[command]
 		if ok {
 			return fmt.Sprintf("%s %s %s %s", arch.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Arch", command)
 		}
-	case Fedora:
+	case types.Fedora:
 		cmd, ok := fedora.Commands[command]
 		if ok {
 			return fmt.Sprintf("%s %s %s %s", fedora.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Fedora", command)
 		}
-	case Flatpak:
+	case types.Flatpak:
 		cmd, ok := flatpak.Commands[command]
 		if ok {
 			return fmt.Sprintf("%s %s %s", flatpak.PackageManager, cmd, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Flatpak", command)
 		}
-	case Alpine:
+	case types.Alpine:
 		cmd, ok := alpine.Commands[command]
 		if ok {
 			return fmt.Sprintf("%s %s %s %s", alpine.PackageManager, cmd, containerName, strings.Join(packageName, " ")), nil
 		} else {
 			return "", fmt.Errorf("%s: is not a valid command for Alpine", command)
 		}
-	case Ubuntu:
+	case types.Ubuntu:
 		cmd, ok := ubuntu.Commands[command]
 		if ok {
 			return fmt.Sprintf("%s %s %s", ubuntu.PackageManager, cmd, strings.Join(packageName, " ")), nil

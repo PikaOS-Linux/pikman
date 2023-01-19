@@ -1,11 +1,14 @@
 package loader
 
-import "testing"
+import (
+	"pikman/types"
+	"testing"
+)
 
 func Test_getCommand(t *testing.T) {
 	type args struct {
 		command       string
-		osType        OSType
+		osType        types.OSType
 		containerName string
 		packageName   []string
 	}
@@ -19,7 +22,7 @@ func Test_getCommand(t *testing.T) {
 			name: "Ubuntu single package",
 			args: args{
 				command:       "install",
-				osType:        Ubuntu,
+				osType:        types.Ubuntu,
 				containerName: "",
 				packageName:   []string{"testPackage"},
 			},
@@ -30,7 +33,7 @@ func Test_getCommand(t *testing.T) {
 			name: "Arch single package",
 			args: args{
 				command:       "install",
-				osType:        Arch,
+				osType:        types.Arch,
 				containerName: "",
 				packageName:   []string{"testPackage"},
 			},
@@ -41,7 +44,7 @@ func Test_getCommand(t *testing.T) {
 			name: "Arch single package with container name",
 			args: args{
 				command:       "install",
-				osType:        Arch,
+				osType:        types.Arch,
 				containerName: "--name testName",
 				packageName:   []string{"testPackage"},
 			},
@@ -52,7 +55,7 @@ func Test_getCommand(t *testing.T) {
 			name: "Ubuntu single package, container name not used",
 			args: args{
 				command:       "install",
-				osType:        Ubuntu,
+				osType:        types.Ubuntu,
 				containerName: "--name testName",
 				packageName:   []string{"testPackage"},
 			},
@@ -63,7 +66,7 @@ func Test_getCommand(t *testing.T) {
 			name: "Ubuntu invalid command should return nothing and error",
 			args: args{
 				command:       "init",
-				osType:        Ubuntu,
+				osType:        types.Ubuntu,
 				containerName: "",
 				packageName:   []string{"testPackage"},
 			},
