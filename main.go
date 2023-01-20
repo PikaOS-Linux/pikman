@@ -10,6 +10,10 @@ import (
 
 func main() {
 
+	if os.Getuid() == 0 {
+		log.Fatalf("Error: Do not run pikman as root")
+	}
+
 	osType := types.Ubuntu
 	containerName := ""
 
@@ -22,7 +26,7 @@ func main() {
 	app := &cli.App{
 		Name:                 "pikman",
 		Usage:                "One package manager to rule them all",
-		Version:              "v0.11",
+		Version:              "v1.23.1.20.0",
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
