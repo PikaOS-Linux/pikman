@@ -16,6 +16,7 @@ func main() {
 
 	osType := types.Ubuntu
 	containerName := ""
+	upgradableFlag := false
 
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:    "version",
@@ -26,7 +27,7 @@ func main() {
 	app := &cli.App{
 		Name:                 "pikman",
 		Usage:                "One package manager to rule them all",
-		Version:              "v1.23.1.20.0",
+		Version:              "v1.23.2.17.0",
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -84,7 +85,7 @@ func main() {
 				Name:  "autoremove",
 				Usage: "Remove all unused packages",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
@@ -92,28 +93,28 @@ func main() {
 				Aliases: []string{"cl"},
 				Usage:   "Clean the package manager cache",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "enter",
 				Usage: "Enter the container instance for select package manager",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "export",
 				Usage: "Export/Recreate a program's desktop entry from the container",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "init",
 				Usage: "Initialize a managed container",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
@@ -121,36 +122,43 @@ func main() {
 				Aliases: []string{"i"},
 				Usage:   "Install the specified package(s)",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:    "list",
 				Aliases: []string{"l"},
 				Usage:   "List installed packages",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "upgradable",
+						Usage:       "Used by list to check upgradable packages",
+						Destination: &upgradableFlag,
+					},
+				},
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), upgradableFlag)
 				},
 			},
 			{
 				Name:  "log",
 				Usage: "Show package manager logs",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "purge",
 				Usage: "Fully purge a package",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "run",
 				Usage: "Run a command inside a managed container",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
@@ -158,7 +166,7 @@ func main() {
 				Aliases: []string{"r"},
 				Usage:   "Remove an installed package",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
@@ -166,28 +174,28 @@ func main() {
 				Aliases: []string{"s"},
 				Usage:   "Search for a package",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "show",
 				Usage: "Show details for a package",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "unexport",
 				Usage: "Unexport/Remove a program's desktop entry",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
 				Name:  "update",
 				Usage: "Update the list of available packages",
 				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 			{
@@ -195,7 +203,7 @@ func main() {
 				Usage: "Upgrade the system by installing/upgrading available packages",
 				Action: func(cCtx *cli.Context) error {
 					cCtx.Args().Tail()
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice())
+					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false)
 				},
 			},
 		},
