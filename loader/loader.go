@@ -29,7 +29,7 @@ var packageManagerMap = map[types.OSType]string{
 	types.Flatpak: flatpak.PackageManager,
 }
 
-func ProcessCommand(command string, osType types.OSType, containerName string, packageName []string, upgradableFlag bool) error {
+func ProcessCommand(command string, osType types.OSType, containerName string, packageName []string, upgradableFlag bool, installedFlag bool) error {
 	var err error
 	if osType != types.Ubuntu && osType != types.Flatpak && containerName != "" {
 		packageName = append([]string{"--name " + containerName}, packageName...)
@@ -37,6 +37,10 @@ func ProcessCommand(command string, osType types.OSType, containerName string, p
 
 	if osType == types.Ubuntu && upgradableFlag {
 		packageName = append([]string{"--upgradable"}, packageName...)
+	}
+
+	if osType == types.Ubuntu && installedFlag {
+		packageName = append([]string{"--installed"}, packageName...)
 	}
 
 	commandToExecute, err := getCommand(command, osType, packageName)
