@@ -1,6 +1,7 @@
-.DEFAULT_GOAL := build
-build:
-	go build -ldflags="-s -w" -o pikman
-install:
+all:
+	true
+
++install:
 	mkdir -p $(DESTDIR)/usr/bin/
-	install -m 755 pikman $(DESTDIR)/usr/bin/
+	go build -ldflags="-s -w" -o $(DESTDIR)/usr/bin/pikman
+	chmod 755 $(DESTDIR)/usr/bin/pikman
