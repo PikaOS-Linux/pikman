@@ -1,5 +1,24 @@
-pikman (0.11-1) UNRELEASED; urgency=medium
+pikman (1.23.2.17.1) kinetic; urgency=low
 
-  * Initial release. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Update.
 
- -- ferreo <harderthanfire@gmail.com>  Wed, 18 Jan 2023 21:48:14 +0000
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 10 Dec 2022 13:48:00 +0300
+
+pikman (1.23.2.17.0) kinetic; urgency=low
+
+  * Update.
+
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 10 Dec 2022 13:48:00 +0300
+
+
+pikman (1.23.1.20.0-99pika1) kinetic; urgency=low
+
+  * Update.
+
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 10 Dec 2022 13:48:00 +0300
+
+pikman (0.11-99pika3) kinetic; urgency=low
+
+  * Initial release.
+
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 10 Dec 2022 13:48:00 +0300

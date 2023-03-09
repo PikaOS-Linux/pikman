@@ -1,16 +1,19 @@
 Source: pikman
-Section: unknown
+Section: admin
 Priority: optional
 Maintainer: ferreo <harderthanfire@gmail.com>
-Rules-Requires-Root: binary-targets
+Rules-Requires-Root: no
 Build-Depends:
- debhelper-compat (= 13),
- golang
+ debhelper-compat (= 13), golang-go
 Standards-Version: 4.6.1
 Homepage: https://pikaos.ferreo.dev
 
 Package: pikman
-Architecture: any
+Essential: yes
+Architecture: amd64
 Depends: ${misc:Depends},
-         ${shlibs:Depends}
+         ${shlibs:Depends},
+         flatpak,
+         nala,
+         apx,
 Description: One package manager to rule them all
