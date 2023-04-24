@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ubuntu:22.10
+      image: ubuntu:23.04
       volumes:
         - /proc:/proc
       options: --privileged -it
