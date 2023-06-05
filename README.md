@@ -4,7 +4,7 @@
 pikman [global options] command [command options] [arguments...]
 
 ## VERSION:
-v1.23.6.5.1
+v1.23.6.5.2
 
 ## COMMANDS:
 

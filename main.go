@@ -33,7 +33,7 @@ func main() {
 	app := &cli.App{
 		Name:                 "pikman",
 		Usage:                "One package manager to rule them all",
-		Version:              "v1.23.6.5.1",
+		Version:              "v1.23.6.5.2",
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{

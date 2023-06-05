@@ -97,16 +97,9 @@ func (c *Command) getCommand() (string, error) {
 }
 
 func (c *Command) runUpgrades() error {
-	var err error
-
 	if c.OsType == types.Ubuntu {
-		err = updates.GetUbuntuUpdates(c.IsJSON)
-		if err != nil {
-			return err
-		}
+		return updates.GetUbuntuUpdates(c.IsJSON)
 	}
 
-	err = updates.GetFlatpakUpdates(c.IsJSON)
-
-	return err
+	return updates.GetFlatpakUpdates(c.IsJSON)
 }

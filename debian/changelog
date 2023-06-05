@@ -1,3 +1,10 @@
+pikman (1.23.6.5.2-99pika2.lunar) lunar; urgency=low
+
+  * Nala -> apt until nala-rs is out
+  * Fix bug in upgrades
+
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 10 Dec 2022 13:48:00 +0300
+
 pikman (1.23.6.5.1-99pika2.lunar) lunar; urgency=low
 
   * Add upgrades with --json flag
