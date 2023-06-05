@@ -4,7 +4,7 @@
 pikman [global options] command [command options] [arguments...]
 
 ## VERSION:
-v1.23.2.17.0
+v1.23.6.5.1
 
 ## COMMANDS:
 
@@ -24,6 +24,7 @@ v1.23.2.17.0
 - **unexport**  - Unexport/Remove a program's desktop entry
 - **update**    - Update the list of available packages
 - **upgrade**   - Upgrade the system by installing/upgrading available packages
+- **upgrades**  - List the available upgrades
 - **help, h**   - Shows a list of commands or help for one command
 
 ## GLOBAL OPTIONS:

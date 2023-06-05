@@ -3,22 +3,27 @@ package main
 import (
 	"log"
 	"os"
-	"pikman/loader"
+
+	"pikman/command"
 	"pikman/types"
 
 	"github.com/urfave/cli/v2"
 )
 
 func main() {
-
 	if os.Getuid() == 0 {
 		log.Fatalf("Error: Do not run pikman as root")
 	}
 
-	osType := types.Ubuntu
-	containerName := ""
-	upgradableFlag := false
-	installedFlag := false
+	cmd := &command.Command{
+		OsType:        types.Ubuntu,
+		ContainerName: "",
+		IsUpgradable:  false,
+		IsJSON:        false,
+		IsInstalled:   false,
+		PackageName:   make([]string, 0),
+	}
+
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:    "version",
 		Aliases: []string{"v"},
@@ -28,7 +33,7 @@ func main() {
 	app := &cli.App{
 		Name:                 "pikman",
 		Usage:                "One package manager to rule them all",
-		Version:              "v1.23.2.17.0",
+		Version:              "v1.23.6.5.1",
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -37,7 +42,7 @@ func main() {
 				Usage:   "Install Arch packages (including from the AUR)",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = types.Arch
+						cmd.OsType = types.Arch
 					}
 					return nil
 				},
@@ -48,7 +53,7 @@ func main() {
 				Usage:   "Install Fedora packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = types.Fedora
+						cmd.OsType = types.Fedora
 					}
 					return nil
 				},
@@ -59,7 +64,7 @@ func main() {
 				Usage:   "Install Alpine packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = types.Alpine
+						cmd.OsType = types.Alpine
 					}
 					return nil
 				},
@@ -70,7 +75,7 @@ func main() {
 				Usage:   "Install Flatpak packages",
 				Action: func(cCtx *cli.Context, b bool) error {
 					if b {
-						osType = types.Flatpak
+						cmd.OsType = types.Flatpak
 					}
 					return nil
 				},
@@ -78,53 +83,41 @@ func main() {
 			&cli.StringFlag{
 				Name:        "name",
 				Usage:       "Name of the managed container",
-				Destination: &containerName,
+				Destination: &cmd.ContainerName,
 			},
 		},
 		Commands: []*cli.Command{
 			{
-				Name:  "autoremove",
-				Usage: "Remove all unused packages",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "autoremove",
+				Usage:  "Remove all unused packages",
+				Action: cmd.Process,
 			},
 			{
 				Name:    "clean",
 				Aliases: []string{"cl"},
 				Usage:   "Clean the package manager cache",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Action:  cmd.Process,
 			},
 			{
-				Name:  "enter",
-				Usage: "Enter the container instance for select package manager",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "enter",
+				Usage:  "Enter the container instance for select package manager",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "export",
-				Usage: "Export/Recreate a program's desktop entry from the container",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "export",
+				Usage:  "Export/Recreate a program's desktop entry from the container",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "init",
-				Usage: "Initialize a managed container",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "init",
+				Usage:  "Initialize a managed container",
+				Action: cmd.Process,
 			},
 			{
 				Name:    "install",
 				Aliases: []string{"i"},
 				Usage:   "Install the specified package(s)",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Action:  cmd.Process,
 			},
 			{
 				Name:    "list",
@@ -134,83 +127,74 @@ func main() {
 					&cli.BoolFlag{
 						Name:        "upgradable",
 						Usage:       "Used by list to check upgradable packages",
-						Destination: &upgradableFlag,
+						Destination: &cmd.IsUpgradable,
 					},
 					&cli.BoolFlag{
 						Name:        "installed",
 						Usage:       "Used by list to check installed packages",
-						Destination: &installedFlag,
+						Destination: &cmd.IsInstalled,
 					},
 				},
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), upgradableFlag, installedFlag)
-				},
+				Action: cmd.Process,
 			},
 			{
-				Name:  "log",
-				Usage: "Show package manager logs",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "log",
+				Usage:  "Show package manager logs",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "purge",
-				Usage: "Fully purge a package",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "purge",
+				Usage:  "Fully purge a package",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "run",
-				Usage: "Run a command inside a managed container",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "run",
+				Usage:  "Run a command inside a managed container",
+				Action: cmd.Process,
 			},
 			{
 				Name:    "remove",
 				Aliases: []string{"r"},
 				Usage:   "Remove an installed package",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Action:  cmd.Process,
 			},
 			{
 				Name:    "search",
 				Aliases: []string{"s"},
 				Usage:   "Search for a package",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Action:  cmd.Process,
 			},
 			{
-				Name:  "show",
-				Usage: "Show details for a package",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "show",
+				Usage:  "Show details for a package",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "unexport",
-				Usage: "Unexport/Remove a program's desktop entry",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "unexport",
+				Usage:  "Unexport/Remove a program's desktop entry",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "update",
-				Usage: "Update the list of available packages",
-				Action: func(cCtx *cli.Context) error {
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
-				},
+				Name:   "update",
+				Usage:  "Update the list of available packages",
+				Action: cmd.Process,
 			},
 			{
-				Name:  "upgrade",
-				Usage: "Upgrade the system by installing/upgrading available packages",
-				Action: func(cCtx *cli.Context) error {
-					cCtx.Args().Tail()
-					return loader.ProcessCommand(cCtx.Command.FullName(), osType, containerName, cCtx.Args().Slice(), false, false)
+				Name:   "upgrade",
+				Usage:  "Upgrade the system by installing/upgrading available packages",
+				Action: cmd.Process,
+			},
+			{
+				Name:  "upgrades",
+				Usage: "List the available upgrades",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "json",
+						Usage:       "Output in JSON",
+						Destination: &cmd.IsJSON,
+					},
 				},
+				Action: cmd.Process,
 			},
 		},
 	}

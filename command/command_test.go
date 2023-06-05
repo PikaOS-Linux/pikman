@@ -1,8 +1,9 @@
-package loader
+package command
 
 import (
-	"pikman/types"
 	"testing"
+
+	"pikman/types"
 )
 
 func Test_getCommand(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_getCommand(t *testing.T) {
 				osType:      types.Ubuntu,
 				packageName: []string{"testPackage"},
 			},
-			want:    "sudo -S nala install testPackage",
+			want:    "sudo -S apt install testPackage",
 			wantErr: false,
 		},
 		{
@@ -60,7 +61,12 @@ func Test_getCommand(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getCommand(tt.args.command, tt.args.osType, tt.args.packageName)
+			command := &Command{
+				Command:     tt.args.command,
+				OsType:      tt.args.osType,
+				PackageName: tt.args.packageName,
+			}
+			got, err := command.getCommand()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getCommand() error = %v, wantErr %v", err, tt.wantErr)
 				return
