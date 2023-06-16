@@ -7,16 +7,13 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ubuntu:23.04
+      image: ghcr.io/pikaos-linux/pika-package-container:latest
       volumes:
         - /proc:/proc
       options: --privileged -it
 
     steps:
     - uses: actions/checkout@v3
-  
-    - name: Install needed packages
-      run: apt update && apt install software-properties-common sudo git bc gpg gpg-agent bison build-essential ccache cpio fakeroot flex git kmod libelf-dev libncurses5-dev libssl-dev lz4 qtbase5-dev rsync schedtool wget zstd tar reprepro dpkg-sig devscripts -y
 
     - name: Import GPG key
       id: import_gpg
