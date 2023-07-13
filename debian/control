@@ -16,7 +16,7 @@ Depends: ${misc:Depends},
          flatpak,
          apx,
          pika-apx-configs,
-         apx-gui,
+         vanilla-apx-gui,
 Conflicts: apx-subsystem-settings
 Provides: apx-subsystem-settings
 Replaces: apx-subsystem-settings
