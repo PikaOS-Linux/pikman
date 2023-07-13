@@ -16,4 +16,7 @@ Depends: ${misc:Depends},
          flatpak,
          apx,
          apx-gui,
+Conflicts: apx-subsystem-settings
+Provides: apx-subsystem-settings
+Replaces: apx-subsystem-settings
 Description: One package manager to rule them all
