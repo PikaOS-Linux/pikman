@@ -1,4 +1,4 @@
-pikman (1.24.0.0.2-99pika2.lunar) lunar; urgency=low
+pikman (1.24.0.0.3-99pika2.lunar) lunar; urgency=low
 
   * Nala -> apt until nala-rs is out
   * Fix bug in upgrades

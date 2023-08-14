@@ -6,7 +6,7 @@ var Commands = map[string]string{
 	"autoremove": "pikman-arch-linux autoremove",
 	"clean":      "pikman-arch-linux clean",
 	"export":     "pikman-arch-linux export",
-	"init":       "subsystems new -n arch-linux -s arch-linux",
+	"init":       "subsystems new -n pikman-arch-linux -s arch-linux",
 	"install":    "pikman-arch-linux install",
 	"list":       "pikman-arch-linux list",
 	"purge":      "pikman-arch-linux purge",
