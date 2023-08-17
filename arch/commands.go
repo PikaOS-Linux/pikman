@@ -2,6 +2,10 @@ package arch
 
 var PackageManager = "apx"
 
+var ContainerSubsystem = "pikman-arch-linux"
+
+var ApxSubsystem = "arch-linux"
+
 var Commands = map[string]string{
 	"autoremove": "pikman-arch-linux autoremove",
 	"clean":      "pikman-arch-linux clean",
