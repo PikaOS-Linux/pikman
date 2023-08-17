@@ -2,10 +2,6 @@ package alpine
 
 var PackageManager = "apx"
 
-var ContainerSubsystem = "pikman-alpine"
-
-var ApxSubsystem = "alpine"
-
 var Commands = map[string]string{
 	"autoremove": "pikman-alpine autoremove",
 	"clean":      "pikman-alpine clean",

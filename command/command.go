@@ -33,26 +33,6 @@ var packageManagerMap = map[types.OSType]string{
 	types.Flatpak: flatpak.PackageManager,
 }
 
-var  containerSubsystemMap = map[types.OSType]string{
-	types.Arch:    arch.ContainerSubsystem,
-	types.Fedora:    fedora.ContainerSubsystem,
-	types.Alpine:    alpine.ContainerSubsystem,
-}
-
-func (c *Command) ContainerSubsystem() string {
-    return containerSubsystemMap[c.OsType]
-}
-
-var  apxSubsystemMap = map[types.OSType]string{
-	types.Arch:    arch.ApxSubsystem,
-	types.Fedora:    fedora.ApxSubsystem,
-	types.Alpine:    alpine.ApxSubsystem,
-}
-
-func (c *Command) ApxSubsystem() string {
-    return apxSubsystemMap[c.OsType]
-}
-
 type Command struct {
 	Command       string
 	OsType        types.OSType
@@ -75,53 +55,6 @@ func (c *Command) processCommand() error {
 	}
 
 	var err error
-	
-	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.Command != "init" && c.ContainerName == "" {
-		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list | grep ^" + c.ContainerSubsystem() + "$")
-    		cmd.Stdin = os.Stdin
-    		cmd.Stderr = os.Stderr
-    		if err != nil {
-       			fmt.Println("Error 1")
-    		}
-    		if err := cmd.Start(); err != nil {
-        		fmt.Println("Error 2")
-    		}
-    		if err != nil {
-        		fmt.Println("Error 3")
-    		}
-    		if err := cmd.Wait(); err != nil {
-    			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
-        		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerSubsystem() + " -s " + c.ApxSubsystem())
-        		cmd_exec.Stdout = os.Stdout
-			if err := cmd_exec.Run(); err != nil {
-  				fmt.Println("Apx Error: ", err)
-			}
-    		}
-	}
-	
-	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.Command != "init" && c.ContainerName != "" {
-		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list | grep ^" + c.ContainerName + "$")
-    		cmd.Stdin = os.Stdin
-    		cmd.Stderr = os.Stderr
-    		if err != nil {
-       			fmt.Println("Error 1")
-    		}
-    		if err := cmd.Start(); err != nil {
-        		fmt.Println("Error 2")
-    		}
-    		if err != nil {
-        		fmt.Println("Error 3")
-    		}
-    		if err := cmd.Wait(); err != nil {
-    			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
-        		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerName + " -s " + c.ApxSubsystem())
-        		cmd_exec.Stdout = os.Stdout
-			if err := cmd_exec.Run(); err != nil {
-  				fmt.Println("Apx Error: ", err)
-			}
-    		}
-	}
-	
 	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.ContainerName != "" {
 		c.PackageName = append([]string{"--name " + c.ContainerName}, c.PackageName...)
 	}

@@ -2,10 +2,6 @@ package fedora
 
 var PackageManager = "apx"
 
-var ContainerSubsystem = "pikman-fedora-workstation"
-
-var ApxSubsystem = "fedora-workstation"
-
 var Commands = map[string]string{
 	"autoremove": "pikman-fedora-workstation autoremove",
 	"clean":      "pikman-fedora-workstation clean",
