@@ -43,4 +43,4 @@ jobs:
         CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
 
         CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-        PURGE_URLS: '["https://ppa.pika-os.com/dists/lunar/InRelease", "https://ppa.pika-os.com/dists/lunar/main/binary-i386/Packages.gz", "https://ppa.pika-os.com/dists/lunar/main/binary-amd64/Packages.gz", "https://ppa.pikaos.com/dists/lunar/pika-sources.deb", "https://ppa.pika-os.com/dists/lunar/main/source/Sources.gz" ]'
+        PURGE_URLS: ${{ vars.PURGE_URLS }}
