@@ -80,21 +80,16 @@ func (c *Command) processCommand() error {
 		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list | grep ^" + c.ContainerSubsystem() + "$")
     		cmd.Stdin = os.Stdin
     		cmd.Stderr = os.Stderr
-    		if err != nil {
-       			fmt.Println("Error 1")
-    		}
-    		if err := cmd.Start(); err != nil {
-        		fmt.Println("Error 2")
-    		}
-    		if err != nil {
-        		fmt.Println("Error 3")
-    		}
+    		cmd.Stdout = os.Stdout
     		if err := cmd.Wait(); err != nil {
     			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
         		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerSubsystem() + " -s " + c.ApxSubsystem())
+        		cmd_exec.Stdin = os.Stdin
+        		cmd_exec.Stderr = os.Stderr
         		cmd_exec.Stdout = os.Stdout
 			if err := cmd_exec.Run(); err != nil {
   				fmt.Println("Apx Error: ", err)
+  				return err
 			}
     		}
 	}
@@ -103,21 +98,16 @@ func (c *Command) processCommand() error {
 		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list | grep ^" + c.ContainerName + "$")
     		cmd.Stdin = os.Stdin
     		cmd.Stderr = os.Stderr
-    		if err != nil {
-       			fmt.Println("Error 1")
-    		}
-    		if err := cmd.Start(); err != nil {
-        		fmt.Println("Error 2")
-    		}
-    		if err != nil {
-        		fmt.Println("Error 3")
-    		}
+    		cmd.Stdout = os.Stdout
     		if err := cmd.Wait(); err != nil {
     			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
         		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerName + " -s " + c.ApxSubsystem())
+        		cmd_exec.Stdin = os.Stdin
+        		cmd_exec.Stderr = os.Stderr
         		cmd_exec.Stdout = os.Stdout
-			if err := cmd_exec.Run(); err != nil {
+			if err := cmd_exec.Run(); err != nil  {
   				fmt.Println("Apx Error: ", err)
+  				return err
 			}
     		}
 	}
