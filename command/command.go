@@ -1,13 +1,11 @@
 package command
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"log"
-	"bytes"
-	"regexp"
 
 	"pikman/alpine"
 	"pikman/arch"
@@ -36,24 +34,24 @@ var packageManagerMap = map[types.OSType]string{
 	types.Flatpak: flatpak.PackageManager,
 }
 
-var  containerSubsystemMap = map[types.OSType]string{
-	types.Arch:    arch.ContainerSubsystem,
-	types.Fedora:    fedora.ContainerSubsystem,
-	types.Alpine:    alpine.ContainerSubsystem,
+var containerSubsystemMap = map[types.OSType]string{
+	types.Arch:   arch.ContainerSubsystem,
+	types.Fedora: fedora.ContainerSubsystem,
+	types.Alpine: alpine.ContainerSubsystem,
 }
 
 func (c *Command) ContainerSubsystem() string {
-    return containerSubsystemMap[c.OsType]
+	return containerSubsystemMap[c.OsType]
 }
 
-var  apxSubsystemMap = map[types.OSType]string{
-	types.Arch:    arch.ApxSubsystem,
-	types.Fedora:    fedora.ApxSubsystem,
-	types.Alpine:    alpine.ApxSubsystem,
+var apxSubsystemMap = map[types.OSType]string{
+	types.Arch:   arch.ApxSubsystem,
+	types.Fedora: fedora.ApxSubsystem,
+	types.Alpine: alpine.ApxSubsystem,
 }
 
 func (c *Command) ApxSubsystem() string {
-    return apxSubsystemMap[c.OsType]
+	return apxSubsystemMap[c.OsType]
 }
 
 type Command struct {
@@ -78,53 +76,14 @@ func (c *Command) processCommand() error {
 	}
 
 	var err error
-	
-	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.Command != "init" && c.ContainerName == "" {
-		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list")
-		var outb bytes.Buffer
-		cmd.Stdout = &outb
-		cmd.Stderr = os.Stderr
-		err := cmd.Run()
+
+	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.Command != "init" {
+		err = c.initContainer()
 		if err != nil {
-    			log.Fatal(err)
+			return err
 		}
-		re := regexp.MustCompile("^" + c.ContainerSubsystem() + "$")
-    		if re.MatchString(outb.String()) {
-    			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
-    			cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerSubsystem() + " -s " + c.ApxSubsystem())
-			cmd_exec.Stdout = os.Stdout
-        		cmd_exec.Stdin = os.Stdin
-        		cmd_exec.Stderr = os.Stderr
-			if err := cmd_exec.Run(); err != nil {
-  				fmt.Println("Apx Error: ", err)
-  				return err
-			}
-    		}
 	}
-	
-	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.Command != "init" && c.ContainerName != "" {
-		cmd := exec.Command("/bin/bash", "-c", "apx subsystems list")
-		var outb bytes.Buffer
-		cmd.Stdout = &outb
-		cmd.Stderr = os.Stderr
-		err := cmd.Run()
-		if err != nil {
-    			log.Fatal(err)
-		}
-		re := regexp.MustCompile("^" + c.ContainerName + "$")
-    		if re.MatchString(outb.String()) {
-    			fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
-        		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n " + c.ContainerName + " -s " + c.ApxSubsystem())
-        		cmd_exec.Stdin = os.Stdin
-        		cmd_exec.Stderr = os.Stderr
-        		cmd_exec.Stdout = os.Stdout
-			if err := cmd_exec.Run(); err != nil  {
-  				fmt.Println("Apx Error: ", err)
-  				return err
-			}
-    		}
-	}
-	
+
 	if c.OsType != types.Ubuntu && c.OsType != types.Flatpak && c.ContainerName != "" {
 		c.PackageName = append([]string{"--name " + c.ContainerName}, c.PackageName...)
 	}
@@ -172,4 +131,48 @@ func (c *Command) runUpgrades() error {
 	}
 
 	return updates.GetFlatpakUpdates(c.IsJSON)
+}
+
+func (c *Command) initContainer() error {
+	contName := c.ContainerName
+	if contName == "" {
+		contName = c.ContainerSubsystem()
+	}
+
+	cmd := exec.Command("/bin/bash", "-c", "apx subsystems list -j")
+	outb, err := cmd.Output()
+	if err != nil {
+		return err
+	}
+
+	var out []apxSubs
+	err = json.Unmarshal(outb, &out)
+	if err != nil {
+		return err
+	}
+
+	isMatch := false
+	for _, sub := range out {
+		if sub.Name == contName {
+			isMatch = true
+			break
+		}
+	}
+
+	if !isMatch {
+		fmt.Println("Warning: Subsystem hasn't been pre-initialized, initializing...")
+		cmd_exec := exec.Command("/bin/bash", "-c", "apx subsystems new -n "+contName+" -s "+c.ApxSubsystem())
+		cmd_exec.Stdout = os.Stdout
+		cmd_exec.Stdin = os.Stdin
+		cmd_exec.Stderr = os.Stderr
+		if err := cmd_exec.Run(); err != nil {
+			fmt.Println("Apx Error: ", err)
+			return err
+		}
+	}
+	return nil
+}
+
+type apxSubs struct {
+	Name string `json:"name"`
 }
