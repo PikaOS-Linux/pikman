@@ -14,6 +14,7 @@ Architecture: amd64
 Depends: ${misc:Depends},
          ${shlibs:Depends},
          flatpak,
+         nala,
          apx,
          pika-apx-configs,
          vanilla-apx-gui,
