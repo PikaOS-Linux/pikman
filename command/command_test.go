@@ -25,7 +25,7 @@ func Test_getCommand(t *testing.T) {
 				osType:      types.Ubuntu,
 				packageName: []string{"testPackage"},
 			},
-			want:    "sudo -S apt install testPackage",
+			want:    "sudo -S nala install testPackage",
 			wantErr: false,
 		},
 		{
@@ -35,7 +35,7 @@ func Test_getCommand(t *testing.T) {
 				osType:      types.Arch,
 				packageName: []string{"testPackage"},
 			},
-			want:    "apx --aur install testPackage",
+			want:    "apx pikman-arch-linux install testPackage",
 			wantErr: false,
 		},
 		{
@@ -45,7 +45,7 @@ func Test_getCommand(t *testing.T) {
 				osType:      types.Arch,
 				packageName: []string{"--name testName", "testPackage"},
 			},
-			want:    "apx --aur install --name testName testPackage",
+			want:    "apx pikman-arch-linux install --name testName testPackage",
 			wantErr: false,
 		},
 		{
