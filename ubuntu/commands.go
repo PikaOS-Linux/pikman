@@ -1,6 +1,6 @@
 package ubuntu
 
-var PackageManager = "sudo -S apt"
+var PackageManager = "sudo -S nala"
 
 var Commands = map[string]string{
 	"autoremove": "autoremove",
@@ -12,5 +12,5 @@ var Commands = map[string]string{
 	"search":     "search",
 	"show":       "show",
 	"update":     "update",
-	"upgrade":    "update && sudo -S apt upgrade",
+	"upgrade":    "upgrade",
 }
